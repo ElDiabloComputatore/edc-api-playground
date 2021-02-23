@@ -1,3 +1,4 @@
+using APIPlayground.Utilities.Swagger;
 using Microsoft.AspNetCore.Builder;
 using Microsoft.AspNetCore.Hosting;
 using Microsoft.AspNetCore.Mvc;
@@ -6,6 +7,9 @@ using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
 using Microsoft.Extensions.Hosting;
 using Microsoft.OpenApi.Models;
+using Swashbuckle.AspNetCore.SwaggerGen;
+using System.Linq;
+using System.Reflection;
 
 namespace APIPlayground
 {
@@ -28,11 +32,10 @@ namespace APIPlayground
                 options.ReportApiVersions = true;
                 options.ApiVersionReader = new HeaderApiVersionReader("api-version");
             });
+
             services.AddControllers();
-            services.AddSwaggerGen(c =>
-            {
-                c.SwaggerDoc("v1", new OpenApiInfo { Title = "APIPlayground", Version = "v1" });
-            });
+
+            ConfigureSwagger(services);
         }
 
         public void Configure(IApplicationBuilder app, IWebHostEnvironment env)
@@ -41,7 +44,11 @@ namespace APIPlayground
             {
                 app.UseDeveloperExceptionPage();
                 app.UseSwagger();
-                app.UseSwaggerUI(c => c.SwaggerEndpoint("/swagger/v1/swagger.json", "APIPlayground v1"));
+                app.UseSwaggerUI(c => 
+                {
+                    c.SwaggerEndpoint("/swagger/v1.0/swagger.json", "APIPlayground API V1.0");
+                    c.SwaggerEndpoint("/swagger/v1.1/swagger.json", "APIPlayground API V1.1");
+                });
             }
 
             app.UseRouting();
@@ -52,6 +59,53 @@ namespace APIPlayground
             {
                 endpoints.MapControllers();
             });
+        }
+
+        private static void ConfigureSwagger(IServiceCollection services)
+        {
+            services.AddSwaggerGen(options =>
+            {
+                options.SwaggerDoc("v1.0",
+                    new OpenApiInfo
+                    {
+                        Version = "v1.0",
+                        Title = "v1.0 API",
+                        Description = "v1.0 API Description",
+                    });
+
+                options.SwaggerDoc("v1.1",
+                    new OpenApiInfo
+                    {
+                        Version = "v1.1",
+                        Title = "v1.1 API",
+                        Description = "v1.1 API Description",
+                    });
+
+                // apply api-version header filter
+                options.OperationFilter<ApiVersionHeaderFilter>();
+
+                // add routes to the right Swagger doc version
+                options.DocInclusionPredicate((version, desc) =>
+                {
+                    if (!desc.TryGetMethodInfo(out MethodInfo methodInfo)) return false;
+
+                    var versions = methodInfo.DeclaringType
+                        .GetCustomAttributes(true)
+                        .OfType<ApiVersionAttribute>()
+                        .SelectMany(attr => attr.Versions);
+
+                    var maps = methodInfo
+                        .GetCustomAttributes(true)
+                        .OfType<MapToApiVersionAttribute>()
+                        .SelectMany(attr => attr.Versions)
+                        .ToArray();
+
+                    var toReturn = versions.Any(v => $"v{v}" == version) && (!maps.Any() || maps.Any(v => $"v{v}" == version));
+
+                    return toReturn;
+                });
+            });
+
         }
     }
 }

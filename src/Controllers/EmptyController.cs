@@ -1,5 +1,6 @@
 ﻿using APIPlayground.Models;
 using Microsoft.AspNetCore.Mvc;
+using Swashbuckle.AspNetCore.Annotations;
 using System.Threading.Tasks;
 
 namespace APIPlayground.Controllers
@@ -18,6 +19,7 @@ namespace APIPlayground.Controllers
         /// <returns></returns>
         [HttpGet]
         [MapToApiVersion("1.0")]
+        [SwaggerResponse(200, Type = typeof(Empty))]
         public async Task<IActionResult> Get()
         {
             return await GetEmptyResult();
@@ -29,7 +31,19 @@ namespace APIPlayground.Controllers
         /// <returns></returns>
         [HttpGet]
         [MapToApiVersion("1.1")]
+        [SwaggerResponse(200, Type = typeof(Empty))]
         public async Task<IActionResult> GetV11()
+        {
+            return await GetEmptyResult();
+        }
+
+        /// <summary>
+        /// Return version value from api-version header
+        /// </summary>
+        /// <returns></returns>
+        [HttpGet("api-version")]
+        [SwaggerResponse(200, Type = typeof(Empty))]
+        public async Task<IActionResult> GetApiVersion()
         {
             return await GetEmptyResult();
         }
