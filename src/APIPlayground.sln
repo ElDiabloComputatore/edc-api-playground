@@ -7,9 +7,9 @@ Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "APIPlayground", "APIPlaygro
 EndProject
 Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "Tests", "Tests", "{95F852FD-324D-4F0D-8800-E2290897E3B4}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "APIPlaygroundTests", "Tests\APIPlaygroundTests\APIPlaygroundTests.csproj", "{830A5C62-482E-405D-8356-2D43D7B51930}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "APIPlaygroundBusinessTests", "Tests\APIPlaygroundTests\APIPlaygroundBusinessTests.csproj", "{830A5C62-482E-405D-8356-2D43D7B51930}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "APIPlaygroundBusiness", "APIPlaygroundBusiness\APIPlaygroundBusiness.csproj", "{9553D273-1F47-4560-B75E-202215A5E4FF}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "APIPlaygroundBusiness", "APIPlaygroundBusiness\APIPlaygroundBusiness.csproj", "{9553D273-1F47-4560-B75E-202215A5E4FF}"
 EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution

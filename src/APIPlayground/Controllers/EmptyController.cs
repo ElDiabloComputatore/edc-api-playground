@@ -11,7 +11,7 @@ namespace APIPlayground.Controllers
     [ApiVersion("1.0", Deprecated = true)]
     [ApiVersion("1.1")]
     [Route("api/[controller]")]
-    public class EmptyController : EmptyBaseController
+    public class EmptyController : BaseController
     {
         /// <summary>
         /// Return string in version 1.0

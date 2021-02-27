@@ -1,4 +1,6 @@
 using APIPlayground.Utilities.Swagger;
+using APIPlaygroundBusiness;
+using Autofac;
 using Microsoft.AspNetCore.Builder;
 using Microsoft.AspNetCore.Hosting;
 using Microsoft.AspNetCore.Mvc;
@@ -36,6 +38,12 @@ namespace APIPlayground
             services.AddControllers();
 
             ConfigureSwagger(services);
+        }
+
+        public void ConfigureContainer(ContainerBuilder builder)
+        {
+            builder.RegisterType<Randomizer>().As<IRandomizer>();
+            builder.RegisterType<BusinessCalculator>().As<IBusinessCalculator   >();
         }
 
         public void Configure(IApplicationBuilder app, IWebHostEnvironment env)

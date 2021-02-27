@@ -2,7 +2,8 @@
 
 namespace APIPlaygroundBusiness
 {
-    public class Class1
+    public interface IRandomizer
     {
+        public int Next();
     }
 }
